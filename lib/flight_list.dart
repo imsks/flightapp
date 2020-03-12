@@ -2,6 +2,20 @@ import 'package:flighttickets/CustomShapeClipper.dart';
 import 'package:flighttickets/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flighttickets/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class InheritedFlightListing extends InheritedWidget {
+  final String fromLocation, toLocation;
+
+  InheritedFlightListing({this.fromLocation, this.toLocation, Widget child})
+      : super(child: child);
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) => true;
+
+  static InheritedFlightListing of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType();
+}
 
 class FlightListingScreen extends StatelessWidget {
   @override
@@ -25,7 +39,9 @@ class FlightListingScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             FlightListTopPart(),
-            SizedBox(height: 16,),
+            SizedBox(
+              height: 16,
+            ),
             FlightListingBottomPart(),
           ],
         ),
@@ -76,7 +92,7 @@ class FlightListTopPart extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Boston (BOS)',
+                            '${InheritedFlightListing.of(context).fromLocation}',
                             style: TextStyle(fontSize: 16),
                           ),
                           Divider(
@@ -84,7 +100,7 @@ class FlightListTopPart extends StatelessWidget {
                             height: 20,
                           ),
                           Text(
-                            'New York (JFK)',
+                            '${InheritedFlightListing.of(context).toLocation}',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -130,25 +146,61 @@ class FlightListingBottomPart extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          ListView(
-            shrinkWrap: true,
-            physics: ClampingScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            children: <Widget>[
-              FlightCard(),
-              FlightCard(),
-              FlightCard(),
-              FlightCard(),
-              FlightCard(),
-            ],
-          )
+          StreamBuilder(
+            stream: Firestore.instance.collection('deals').snapshots(),
+            builder: (context, snapshot) {
+              return !snapshot.hasData
+                  ? CircularProgressIndicator
+                  : _buildDealsList(context, snapshot.data.documents);
+            },
+          ),
         ],
       ),
     );
   }
 }
 
+Widget _buildDealsList(BuildContext context, List<DocumentSnapshot> snapshots) {
+  return ListView.builder(
+    shrinkWrap: true,
+    itemCount: snapshots.length,
+    physics: ClampingScrollPhysics(),
+    scrollDirection: Axis.vertical,
+    itemBuilder: (context, index) {
+      return FlightCard(
+        flightDetails: FlightDetails.fromSnapshot(
+          snapshots[index],
+        ),
+      );
+    },
+  );
+}
+
+class FlightDetails {
+  final String airlines, date, discount, rating;
+  final int oldPrice, newPrice;
+
+  FlightDetails.fromMap(Map<String, dynamic> map)
+      : assert(map['airlines'] != null),
+        assert(map['date'] != null),
+        assert(map['discount'] != null),
+        assert(map['rating'] != null),
+        airlines = map['airlines'],
+        date = map['date'],
+        discount = map['discount'],
+        oldPrice = map['oldPrice'],
+        newPrice = map['newPrice'],
+        rating = map['rating'];
+
+  FlightDetails.fromSnapshot(DocumentSnapshot snapshot)
+      : this.fromMap(snapshot.data);
+}
+
 class FlightCard extends StatelessWidget {
+  final FlightDetails flightDetails;
+
+  const FlightCard({this.flightDetails});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -170,14 +222,14 @@ class FlightCard extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        "${formatCurrency.format(4159)}",
+                        "${formatCurrency.format(flightDetails.newPrice)}",
                         style: kNewPriceStyle,
                       ),
                       SizedBox(
                         width: 16,
                       ),
                       Text(
-                        "${formatCurrency.format(9999)}",
+                        "${formatCurrency.format(flightDetails.oldPrice)}",
                         style: kOldPriceStyle,
                       ),
                     ],
@@ -186,9 +238,18 @@ class FlightCard extends StatelessWidget {
                     spacing: 8,
                     runSpacing: -8,
                     children: <Widget>[
-                      FlightDetailsChip(Icons.calendar_today, "June 2019"),
-                      FlightDetailsChip(Icons.flight_takeoff, "Jet Airways"),
-                      FlightDetailsChip(Icons.star, "4.4"),
+                      FlightDetailsChip(
+                        Icons.calendar_today,
+                        "${flightDetails.date}",
+                      ),
+                      FlightDetailsChip(
+                        Icons.flight_takeoff,
+                        "${flightDetails.airlines}",
+                      ),
+                      FlightDetailsChip(
+                        Icons.star,
+                        "${flightDetails.rating}",
+                      ),
                     ],
                   )
                 ],
@@ -201,7 +262,7 @@ class FlightCard extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Text(
-                "55%",
+                "${flightDetails.discount}",
                 style: TextStyle(
                     color: appTheme.primaryColor,
                     fontSize: 14,

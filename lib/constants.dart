@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 // Theme
 ThemeData appTheme = ThemeData(
@@ -21,6 +22,8 @@ final Color chipBackgroundColor = Color(0xFFF6F6F6);
 
 // Other content
 List<String> locations = ['Boston (BOS)', 'New York City (JFK)'];
+
+final formatCurrency = NumberFormat.simpleCurrency();
 
 const TextStyle kDropDownLabelStyle = TextStyle(
   color: Colors.white,

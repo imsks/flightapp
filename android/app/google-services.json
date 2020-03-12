@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "428371937243",
+    "firebase_url": "https://flight-app-mock-f9dbe.firebaseio.com",
+    "project_id": "flight-app-mock-f9dbe",
+    "storage_bucket": "flight-app-mock-f9dbe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:428371937243:android:6f22f8d058eda019cf09fe",
+        "android_client_info": {
+          "package_name": "com.example.flightapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "428371937243-6o5ff4oq0s1hgge89tj9gcl0frvpblmn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDexjkNFH0iWbGVslrHbGedc-r9wepF_mE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "428371937243-6o5ff4oq0s1hgge89tj9gcl0frvpblmn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
