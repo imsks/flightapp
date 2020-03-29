@@ -1,37 +1,39 @@
 {
   "project_info": {
-    "project_number": "428371937243",
-    "firebase_url": "https://flight-app-mock-f9dbe.firebaseio.com",
-    "project_id": "flight-app-mock-f9dbe",
-    "storage_bucket": "flight-app-mock-f9dbe.appspot.com"
+    "project_number": "1009830851809",
+    "firebase_url": "https://flight-app-mock.firebaseio.com",
+    "project_id": "flight-app-mock",
+    "storage_bucket": "flight-app-mock.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:428371937243:android:6f22f8d058eda019cf09fe",
+        "mobilesdk_app_id": "1:1009830851809:android:8658d2b8af672428",
         "android_client_info": {
-          "package_name": "com.example.flightapp"
+          "package_name": "com.example.flighttickets"
         }
       },
       "oauth_client": [
         {
-          "client_id": "428371937243-6o5ff4oq0s1hgge89tj9gcl0frvpblmn.apps.googleusercontent.com",
+          "client_id": "1009830851809-fson0hcffv5i5tb8l3v1lm82pmen2fei.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDexjkNFH0iWbGVslrHbGedc-r9wepF_mE"
+          "current_key": "AIzaSyBZuG4V8TAgrd32ZU9aTbWlUQnk_3FVlKc"
         }
       ],
       "services": {
+        "analytics_service": {
+          "status": 1
+        },
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "428371937243-6o5ff4oq0s1hgge89tj9gcl0frvpblmn.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
         }
       }
     }
